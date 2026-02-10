@@ -54,15 +54,10 @@ export default function AvatarUploadPage() {
           <option value="">Select category</option>
           <option value="top">Top</option>
           <option value="bottom">Bottom</option>
-          <option value="shoes">Shoes</option>
+          <option value="self">Self</option>
         </select>
         <button type="submit">Upload</button>
       </form>
-      {blob && (
-        <div>
-          Blob url: <a href={blob.url}>{blob.url}</a>
-        </div>
-      )}
     </>
   );
 }

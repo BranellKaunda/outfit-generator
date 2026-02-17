@@ -13,7 +13,8 @@ export default async function handler(
 
     const { imageUrls } = req.body;
 
-    if (!imageUrls) {
+    //do not generate image if there is a missing image url for top, bottom or self
+    if (!imageUrls || imageUrls.length !== 3) {
       return res
         .status(400)
         .json({ error: "imageUrls must be an array of URLs" });

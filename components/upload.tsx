@@ -3,10 +3,17 @@
 import type { PutBlobResult } from "@vercel/blob";
 import { useState } from "react";
 
-export default function AvatarUploadPage() {
+export default function AvatarUploadPage({
+  uploadCount,
+  setUploadCount,
+}: {
+  uploadCount: number;
+  setUploadCount: (count: number) => void;
+}) {
   const [selectFile, setSelectFile] = useState<File | null>(null);
   const [typeOfClothing, setTypeOfClothing] = useState("");
   const [blob, setBlob] = useState<PutBlobResult | null>(null);
+  const [isUploaded, setIsUploaded] = useState(false);
 
   const hanldeFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -15,14 +22,17 @@ export default function AvatarUploadPage() {
 
   return (
     <>
-      <h1>Upload Your Avatar</h1>
+      {/* <h1 className="upload-title">Upload</h1> */}
 
       <form
         onSubmit={async (event) => {
           event.preventDefault();
 
-          if (!selectFile) {
-            throw new Error("No file selected");
+          if (!selectFile || !typeOfClothing) {
+            /* throw new Error("No file selected"); */
+            alert("Please select a file and category to upload.");
+            setIsUploaded(false);
+            return;
           }
 
           const formData = new FormData();
@@ -37,15 +47,21 @@ export default function AvatarUploadPage() {
           const newBlob = (await response.json()) as PutBlobResult;
 
           setBlob(newBlob);
+          setUploadCount(uploadCount + 1);
+          setIsUploaded(true);
         }}
       >
-        <input
-          name="file"
-          onChange={hanldeFileChange}
-          type="file"
-          accept="image/jpeg, image/png, image/webp"
-          required
-        />
+        <label className="file-button">
+          Choose File
+          <input
+            name="file"
+            onChange={hanldeFileChange}
+            type="file"
+            accept="image/jpeg, image/png, image/webp"
+            required
+          />
+        </label>
+
         <select
           name="category"
           required
@@ -57,6 +73,9 @@ export default function AvatarUploadPage() {
           <option value="self">Self</option>
         </select>
         <button type="submit">Upload</button>
+        {isUploaded && (
+          <p className="success-message">File uploaded successfully! </p>
+        )}
       </form>
     </>
   );

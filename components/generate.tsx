@@ -15,14 +15,14 @@ export default function GenerateImage({
 }: GenerateImageProps) {
   const [url, setUrl] = useState("");
 
-  /* const prompt = `
-    You are an expert in Photoshop. Use the following file paths of a top and a bottom 
-    to generate an image using the file path of a person wearing them: ${myUrls.join(", ")}.
-    Make it as realistic as possible.
-  `; */
-
   async function generate() {
     const imageUrls = [tops, bottom, self].filter(Boolean);
+
+    if (imageUrls.length !== 3) {
+      alert("Please upload images for top, bottom, and self before styling.");
+      return;
+    }
+
     const res = await fetch("/api/image", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -38,11 +38,8 @@ export default function GenerateImage({
   }
 
   return (
-    <div>
-      <button onClick={generate}>Generate Image</button>
-      <p>{tops}</p>
-      <p>{bottom}</p>
-      <p>{self}</p>
+    <div className="generate-wrapper">
+      <button onClick={generate}>Style Me</button>
 
       {url && (
         <img

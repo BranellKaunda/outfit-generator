@@ -10,7 +10,9 @@ export default function UserInfo() {
 
   return (
     <div className="user-info">
-      <h2>Welcome, {session.user.name}</h2>
+      <h2>
+        Welcome, <span style={{ color: "green" }}>{session.user.name}</span>
+      </h2>
     </div>
   );
 }

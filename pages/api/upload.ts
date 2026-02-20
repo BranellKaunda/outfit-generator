@@ -25,7 +25,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     const userId = fields.userId?.[0];
-    //passed the user id usind formiable
+    //passed the user id using formiable
 
     // Formidable v3 returns arrays
     const file = files.file?.[0];
@@ -48,21 +48,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         addRandomSuffix: true,
       },
     );
-
-    console.log(blob);
-    console.log(fields.type);
-
-    /* const protocol =
-      req.headers["x-forwarded-proto"] ||
-      (req.headers.host?.includes("localhost") ? "http" : "https");
-    const host = req.headers.host;
-    const baseUrl = `${protocol}://${host}`;
-    const sessionRes = await fetch(`${baseUrl}/api/auth/session`, {
-      headers: { cookie: req.headers.cookie || "" },
-    });
-
-    const session = await sessionRes.json();
-    console.log(session); */
 
     //adding values to neon database tables
     const sql = neon(process.env.DATABASE_URL!);

@@ -1,10 +1,10 @@
 "use client";
 
 import type { PutBlobResult } from "@vercel/blob";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { authClient } from "@/lib/auth-client";
 
-export default function AvatarUploadPage({
+export default function UploadForm({
   uploadCount,
   setUploadCount,
 }: {
@@ -22,6 +22,16 @@ export default function AvatarUploadPage({
     const file = event.target.files?.[0];
     setSelectFile(file || null);
   };
+
+  useEffect(() => {
+    if (!isUploaded) return;
+
+    const timer = setTimeout(() => {
+      setIsUploaded(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [isUploaded]);
 
   return (
     <>
@@ -49,7 +59,6 @@ export default function AvatarUploadPage({
             method: "POST",
             body: formData,
           });
-          console.log(`this is you user id from client: ${userId}`);
 
           const newBlob = (await response.json()) as PutBlobResult;
 
@@ -59,7 +68,7 @@ export default function AvatarUploadPage({
         }}
       >
         <label className="file-button">
-          Choose File
+          Choose Photo
           <input
             name="file"
             onChange={hanldeFileChange}

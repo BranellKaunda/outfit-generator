@@ -1,5 +1,5 @@
 CREATE TABLE "clothes" (
-	"id" text PRIMARY KEY NOT NULL,
+	"id" serial PRIMARY KEY NOT NULL,
 	"user_id" text NOT NULL,
 	"file" text NOT NULL,
 	"type" text NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE "clothes" (
 );
 --> statement-breakpoint
 CREATE TABLE "profiles" (
-	"id" text PRIMARY KEY NOT NULL,
+	"id" serial PRIMARY KEY NOT NULL,
 	"user_id" text NOT NULL,
 	"file" text NOT NULL,
 	"created_at" timestamp DEFAULT now()

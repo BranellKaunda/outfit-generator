@@ -20,8 +20,10 @@ export default function LogoutPage() {
   };
 
   return (
-    <button className="logout" onClick={logOut}>
-      Log out
-    </button>
+    <>
+      <div className="logout">
+        <button onClick={logOut}>Log out</button>
+      </div>
+    </>
   );
 }

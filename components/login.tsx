@@ -4,37 +4,34 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 
-type SignUpPageProps = {
+type LogInFormProps = {
   setAlreadyHaveAccount: (value: boolean) => void;
 };
 
-export default function SignUpPage({ setAlreadyHaveAccount }: SignUpPageProps) {
+export default function LogInForm({ setAlreadyHaveAccount }: LogInFormProps) {
   const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    setErrorMessage("");
 
-    const { data, error } = await authClient.signUp.email(
+    const { data, error } = await authClient.signIn.email(
       {
         email,
         password,
-        name,
-        callbackURL: "/dashboard",
+        callbackURL: "/",
+        rememberMe: true, // optional
       },
       {
         onRequest: () => {
           setIsLoading(true);
+          setErrorMessage("");
         },
         onSuccess: () => {
-          //router.push("../app");
           router.push("/");
         },
         onError: (ctx) => {
@@ -47,51 +44,43 @@ export default function SignUpPage({ setAlreadyHaveAccount }: SignUpPageProps) {
   };
 
   return (
-    <div className="signup-container max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
-      <h1 className="text-2xl font-semibold mb-6">Create an account</h1>
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          placeholder="Name"
-          className="w-full border p-2 rounded"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
+    <div className="login-container">
+      <form onSubmit={handleSubmit}>
+        <h2>Login</h2>
 
         <input
           type="email"
           placeholder="Email"
-          className="w-full border p-2 rounded"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
 
         <input
           type="password"
           placeholder="Password"
-          className="w-full border p-2 rounded"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
 
-        {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
+        {errorMessage ? <p className="error-message">{errorMessage}</p> : ""}
 
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-black text-white p-2 rounded"
+          className="bg-blue-600 text-white px-4 py-2 rounded"
         >
-          {isLoading ? "Creating account..." : "Sign Up"}
+          {isLoading ? "Logging in..." : "Login"}
         </button>
 
         <p className="text-center mt-4">
-          Already have an account?{" "}
+          Dont have an account?{" "}
           <a
             className="text-blue-500 hover:underline"
-            onClick={() => setAlreadyHaveAccount(true)}
+            onClick={() => setAlreadyHaveAccount(false)}
           >
-            Login
+            Sign Up
           </a>
         </p>
       </form>

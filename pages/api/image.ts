@@ -2,7 +2,7 @@ import { GoogleGenAI } from "@google/genai";
 import * as fs from "node:fs";
 import { NextApiRequest, NextApiResponse } from "next";
 
-/* export default async function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
@@ -70,4 +70,4 @@ import { NextApiRequest, NextApiResponse } from "next";
   }
 
   return res.status(500).json({ error: "Failed to generate image" });
-} */
+}

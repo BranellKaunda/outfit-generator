@@ -45,13 +45,12 @@ export default function LogInForm({ setAlreadyHaveAccount }: LogInFormProps) {
 
   return (
     <div className="login-container">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <h1 className="text-xl font-semibold">Login</h1>
+      <form onSubmit={handleSubmit}>
+        <h2>Login</h2>
 
         <input
           type="email"
           placeholder="Email"
-          className="border p-2 w-full"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -60,7 +59,6 @@ export default function LogInForm({ setAlreadyHaveAccount }: LogInFormProps) {
         <input
           type="password"
           placeholder="Password"
-          className="border p-2 w-full"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required

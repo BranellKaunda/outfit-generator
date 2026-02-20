@@ -27,7 +27,7 @@ export default function SignUpPage({ setAlreadyHaveAccount }: SignUpPageProps) {
         email,
         password,
         name,
-        callbackURL: "/dashboard",
+        callbackURL: "/",
       },
       {
         onRequest: () => {
@@ -47,8 +47,8 @@ export default function SignUpPage({ setAlreadyHaveAccount }: SignUpPageProps) {
   };
 
   return (
-    <div className="signup-container max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
-      <h1 className="text-2xl font-semibold mb-6">Create an account</h1>
+    <div className="signup-container puff-in-center ">
+      <h2>Create an account</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <input

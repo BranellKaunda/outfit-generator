@@ -1,5 +1,5 @@
 {
-  "id": "8254cc69-2f32-4529-9b91-0cd152797f65",
+  "id": "76ceab2d-bda6-4e7f-9419-8dfff890c635",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -10,7 +10,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
+          "type": "serial",
           "primaryKey": true,
           "notNull": true
         },
@@ -68,7 +68,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
+          "type": "serial",
           "primaryKey": true,
           "notNull": true
         },

@@ -1,27 +1,33 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import { useState } from "react";
 
 interface GenerateImageProps {
   tops?: string;
   bottom?: string;
   self?: string;
+  setUrl?: (value: string) => void;
+
+  setImageIsGenerating?: (value: boolean) => void;
 }
 
 export default function GenerateImage({
   tops,
   bottom,
   self,
-}: GenerateImageProps) {
-  const [url, setUrl] = useState("");
+  setUrl,
 
+  setImageIsGenerating,
+}: GenerateImageProps) {
   async function generate() {
     const imageUrls = [tops, bottom, self].filter(Boolean);
 
     if (imageUrls.length !== 3) {
+      setImageIsGenerating?.(false);
       alert("Please upload images for top, bottom, and self before styling.");
       return;
     }
+
+    setImageIsGenerating?.(true);
 
     const res = await fetch("/api/image", {
       method: "POST",
@@ -32,22 +38,14 @@ export default function GenerateImage({
     });
 
     const data = await res.json();
+    setImageIsGenerating?.(false);
     //image url returned from images.ts end point
-    setUrl(data.imageUrl);
-    console.log(data);
+    setUrl?.(data.imageUrl);
   }
 
   return (
     <div className="generate-wrapper">
       <button onClick={generate}>Style Me</button>
-
-      {url && (
-        <img
-          src={url}
-          alt="Generated"
-          style={{ marginTop: "20px", maxWidth: "400px" }}
-        />
-      )}
     </div>
   );
 }

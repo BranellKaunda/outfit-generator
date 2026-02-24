@@ -1,6 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
-import * as fs from "node:fs";
 import { NextApiRequest, NextApiResponse } from "next";
+import { put } from "@vercel/blob";
+import { neon } from "@neondatabase/serverless";
 
 export default async function handler(
   req: NextApiRequest,
@@ -11,7 +12,7 @@ export default async function handler(
       return res.status(405).json({ error: "Method not allowed" });
     }
 
-    const { imageUrls } = req.body;
+    const { imageUrls, userId } = req.body;
 
     //do not generate image if there is a missing image url for top, bottom or self
     if (!imageUrls || imageUrls.length !== 3) {
@@ -54,10 +55,25 @@ export default async function handler(
     for (const part of result.candidates?.[0]?.content?.parts || []) {
       if (part.inlineData) {
         const imageData: string = part.inlineData.data as string;
-        const buffer = Buffer.from(imageData, "base64");
-        fs.writeFileSync("./public/gemini-native-image.png", buffer);
+        const buffer = Buffer.from(imageData, "base64"); //image
+        // fs.writeFileSync("./public/gemini-native-image.png", buffer);
 
-        return res.status(200).json({ imageUrl: "/gemini-native-image.png" });
+        const prefix = `outfits/`;
+
+        const blob = await put(`${prefix}gemini-native-image.png`, buffer, {
+          access: "public",
+          addRandomSuffix: true,
+        });
+
+        //adding values to neon database tables
+        const sql = neon(process.env.DATABASE_URL!);
+
+        await sql`
+        INSERT INTO outfits (files, user_id)
+        VALUES (${[blob.url]}, ${userId})
+      `;
+
+        return res.status(200).json({ imageUrl: blob.url });
       }
     }
 

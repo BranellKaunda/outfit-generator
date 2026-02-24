@@ -1,6 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
+import { authClient } from "@/lib/auth-client";
+
 interface GenerateImageProps {
   tops?: string;
   bottom?: string;
@@ -18,6 +20,8 @@ export default function GenerateImage({
 
   setImageIsGenerating,
 }: GenerateImageProps) {
+  const { data: session } = authClient.useSession();
+
   async function generate() {
     const imageUrls = [tops, bottom, self].filter(Boolean);
 
@@ -34,6 +38,7 @@ export default function GenerateImage({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         imageUrls,
+        userId: session?.user?.id,
       }),
     });
 

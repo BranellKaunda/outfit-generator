@@ -37,3 +37,22 @@ export const profilesRelations = relations(profiles, ({ one }) => ({
     references: [user.id],
   }),
 }));
+
+//this table stores generated outfits for each user
+export const outfits = pgTable("outfits", {
+  id: serial("id").primaryKey(),
+
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  files: text("files").array().notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Relations for outfits
+export const outfitsRelations = relations(outfits, ({ one }) => ({
+  user: one(user, {
+    fields: [outfits.userId],
+    references: [user.id],
+  }),
+}));

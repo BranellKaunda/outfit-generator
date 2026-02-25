@@ -2,6 +2,10 @@ import { GoogleGenAI } from "@google/genai";
 import { NextApiRequest, NextApiResponse } from "next";
 import { put } from "@vercel/blob";
 import { neon } from "@neondatabase/serverless";
+import { checkDailyOutfitLimit } from "@/lib/outfitlimit";
+
+const sql = neon(process.env.DATABASE_URL!);
+const DAILY_OUTFIT_LIMIT = 3;
 
 export default async function handler(
   req: NextApiRequest,
@@ -19,6 +23,17 @@ export default async function handler(
       return res
         .status(400)
         .json({ error: "imageUrls must be an array of URLs" });
+    }
+
+    // Check if the user has reached their daily outfit generation limit
+    const limit = await checkDailyOutfitLimit(userId, DAILY_OUTFIT_LIMIT);
+
+    if (limit.reached) {
+      return res.status(403).json({
+        error: "Daily outfit limit reached",
+        remaining: 0,
+        limit: DAILY_OUTFIT_LIMIT,
+      });
     }
 
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
@@ -66,8 +81,6 @@ export default async function handler(
         });
 
         //adding values to neon database tables
-        const sql = neon(process.env.DATABASE_URL!);
-
         await sql`
         INSERT INTO outfits (files, user_id)
         VALUES (${[blob.url]}, ${userId})

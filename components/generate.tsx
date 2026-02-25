@@ -1,7 +1,7 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { authClient } from "@/lib/auth-client";
+import { useState } from "react";
 
 interface GenerateImageProps {
   tops?: string;
@@ -20,6 +20,7 @@ export default function GenerateImage({
 
   setImageIsGenerating,
 }: GenerateImageProps) {
+  const [dailyLimitReached, setDailyLimitReached] = useState(false);
   const { data: session } = authClient.useSession();
 
   async function generate() {
@@ -42,14 +43,27 @@ export default function GenerateImage({
       }),
     });
 
+    if (res.status === 403) {
+      setDailyLimitReached(true);
+      setImageIsGenerating?.(false);
+      return;
+    }
+
     const data = await res.json();
     setImageIsGenerating?.(false);
+    setDailyLimitReached(false);
     //image url returned from images.ts end point
     setUrl?.(data.imageUrl);
   }
 
   return (
     <div className="generate-wrapper">
+      {dailyLimitReached && (
+        <p className="limit-message">
+          You have reached your daily outfit generation limit. Please try again
+          tomorrow.
+        </p>
+      )}
       <button onClick={generate}>Style Me</button>
     </div>
   );

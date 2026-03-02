@@ -4,17 +4,20 @@ import type { PutBlobResult } from "@vercel/blob";
 import { useState, useEffect } from "react";
 import { authClient } from "@/lib/auth-client";
 
+type UploadFormProps = {
+  uploadCount: number;
+  setUploadCount: (count: number) => void;
+};
+
 export default function UploadForm({
   uploadCount,
   setUploadCount,
-}: {
-  uploadCount: number;
-  setUploadCount: (count: number) => void;
-}) {
+}: UploadFormProps) {
   const [selectFile, setSelectFile] = useState<File | null>(null);
   const [typeOfClothing, setTypeOfClothing] = useState("");
   const [blob, setBlob] = useState<PutBlobResult | null>(null);
   const [isUploaded, setIsUploaded] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
   const { data: session } = authClient.useSession();
 
@@ -35,8 +38,6 @@ export default function UploadForm({
 
   return (
     <>
-      {/* <h1 className="upload-title">Upload</h1> */}
-
       <form
         onSubmit={async (event) => {
           event.preventDefault();
@@ -45,6 +46,7 @@ export default function UploadForm({
             /* throw new Error("No file selected"); */
             alert("Please select a file and category to upload.");
             setIsUploaded(false);
+            setIsUploading(false);
             return;
           }
 
@@ -63,10 +65,13 @@ export default function UploadForm({
           const newBlob = (await response.json()) as PutBlobResult;
 
           setBlob(newBlob);
-          setUploadCount(uploadCount + 1);
+          setUploadCount(uploadCount + 1); // Increment upload count on successful upload
           setIsUploaded(true);
+          setIsUploading(false);
         }}
       >
+        <h2>Upload your clothing items</h2>
+
         <label className="file-button">
           Choose Photo
           <input
@@ -88,8 +93,9 @@ export default function UploadForm({
           <option value="bottom">Bottom</option>
           <option value="self">Self</option>
         </select>
-        <button type="submit">Upload</button>
-        {/* <UploadButton /> */}
+        <button type="submit" onClick={() => setIsUploading(true)}>
+          {isUploading ? "Uploading..." : "Upload"}
+        </button>
         {isUploaded && (
           <p className="success-message">File uploaded successfully! </p>
         )}

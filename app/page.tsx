@@ -8,6 +8,7 @@ import LogoutPage from "../components/logout";
 import { authClient } from "@/lib/auth-client";
 import LogInForm from "../components/login";
 import UploadForm from "@/components/upload";
+import Closet from "./Closet/page";
 
 interface Clothing {
   file: string;
@@ -20,7 +21,7 @@ export default function Home() {
   const [topIndex, setTopIndex] = useState(0);
   const [bottomIndex, setBottomIndex] = useState(0);
   const [isFetched, setIsFetched] = useState(false);
-  const [uploadCount, setUploadCount] = useState(0);
+  const [uploadCount, setUploadCount] = useState(0); // State to track successful uploads
   const [alreadyHaveAccount, setAlreadyHaveAccount] = useState(false);
   const [url, setUrl] = useState(""); //generated imaged url sent as a prop to <generated/>
   const [imageIsGenerating, setImageIsGenerating] = useState(false);
@@ -225,6 +226,7 @@ export default function Home() {
           />
         </div>
 
+        <Closet clothes={clothes} />
         <LogoutPage />
       </>
     </main>

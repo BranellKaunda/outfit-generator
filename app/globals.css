@@ -312,6 +312,34 @@ input {
   }
 }
 
+.outfits-wrapper {
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  padding: 8px;
+  color: black;
+
+  & div {
+    max-width: 100%;
+    min-height: auto;
+    border: 1px solid grey;
+    border-radius: 12px;
+    padding: 8px;
+  }
+
+  & img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 12px;
+  }
+
+  & p {
+    max-width: 100%;
+  }
+}
+
 .closet-wrapper {
   margin: auto;
   display: grid;
@@ -332,6 +360,7 @@ input {
     width: 100%;
     height: 100%;
     object-fit: contain;
+    border-radius: 12px;
   }
 
   & p {
@@ -341,6 +370,14 @@ input {
 
 .closet-h2,
 .closet-msg {
+  text-align: center;
+}
+
+.outfits-h2 {
+  text-align: center;
+}
+
+.outfits-msg {
   text-align: center;
 }
 
@@ -414,6 +451,10 @@ input {
   .closet-wrapper {
     max-width: 80%;
   }
+
+  .outfits-wrapper {
+    max-width: 80%;
+  }
 }
 
 @media (min-width: 1005px) {
@@ -422,6 +463,11 @@ input {
   }
 
   .closet-wrapper {
+    max-width: 70%;
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .outfits-wrapper {
     max-width: 70%;
     grid-template-columns: repeat(4, 1fr);
   }
@@ -450,6 +496,11 @@ input {
   }
 
   .closet-wrapper {
+    max-width: 60%;
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .outfits-wrapper {
     max-width: 60%;
     grid-template-columns: repeat(5, 1fr);
   }

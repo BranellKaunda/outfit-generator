@@ -23,11 +23,18 @@ export default function Closet({ clothes = [] }: { clothes?: Clothing[] }) {
     <>
       <h2 className="closet-h2">Closet</h2>
       <div className="closet-wrapper">
-        {clothes.map((item) => (
-          <div key={item.id}>
-            <img src={item.file} alt={`${item.type} item`} />
-          </div>
-        ))}
+        {clothes.map(
+          (item) =>
+            item.type !== "self" && (
+              <div key={item.id} className="closet-item">
+                <img
+                  src={item.file}
+                  alt={`${item.type} ${item.id}`}
+                  className="closet-image"
+                />
+              </div>
+            ),
+        )}
       </div>
     </>
   );

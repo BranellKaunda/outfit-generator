@@ -9,6 +9,7 @@ import { authClient } from "@/lib/auth-client";
 import LogInForm from "../components/login";
 import UploadForm from "@/components/upload";
 import Closet from "./Closet/page";
+import Outfits from "./Outfits/page";
 
 interface Clothing {
   file: string;
@@ -227,6 +228,7 @@ export default function Home() {
         </div>
 
         <Closet clothes={clothes} />
+        <Outfits url={url} />
         <LogoutPage />
       </>
     </main>

@@ -34,7 +34,7 @@ export default function GenerateImage({
 
     setImageIsGenerating?.(true);
 
-    const res = await fetch("/api/image", {
+    const res = await fetch("/api/generate-outfit", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

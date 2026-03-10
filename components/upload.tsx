@@ -81,6 +81,7 @@ export default function UploadForm({
             accept="image/jpeg, image/png, image/webp"
             required
           />
+          {selectFile && <span className="file-name">{selectFile.name}</span>}
         </label>
 
         <select
@@ -91,7 +92,7 @@ export default function UploadForm({
           <option value="">Select category</option>
           <option value="top">Top</option>
           <option value="bottom">Bottom</option>
-          <option value="self">Self</option>
+          <option value="self">User</option>
         </select>
         <button type="submit" onClick={() => setIsUploading(true)}>
           {isUploading ? "Uploading..." : "Upload"}

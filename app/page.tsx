@@ -10,6 +10,7 @@ import LogInForm from "../components/login";
 import UploadForm from "@/components/upload";
 import Closet from "./Closet/page";
 import Outfits from "./Outfits/page";
+import ProductLink from "@/components/productlink";
 
 interface Clothing {
   file: string;
@@ -26,6 +27,7 @@ export default function Home() {
   const [alreadyHaveAccount, setAlreadyHaveAccount] = useState(false);
   const [url, setUrl] = useState(""); //generated imaged url sent as a prop to <generated/>
   const [imageIsGenerating, setImageIsGenerating] = useState(false);
+  const [pasteUrl, setPasteUrl] = useState("");
 
   const { data: session, isPending } = authClient.useSession();
 
@@ -203,13 +205,25 @@ export default function Home() {
               ) : url ? (
                 // 2. Generated AI image
                 <img src={url} alt="Generated outfit" />
+              ) : pasteUrl ? (
+                //3. outfit from product link try on
+                <img src={pasteUrl} alt="Pasted outfit" />
               ) : self?.[0] ? (
-                // 3. Self image fallback
+                // 4. Self image fallback
                 <img key={self[0].id} src={self[0].file} alt="self image" />
               ) : (
-                // 4. No image at all
+                // 5. No image at all
                 <img src="/no-img.png" alt="No self image available" />
               )}
+
+              {/*button / style me button*/}
+              <GenerateImage
+                tops={tops?.[topIndex]?.file}
+                bottom={bottoms?.[bottomIndex]?.file}
+                self={self?.[0]?.file}
+                setUrl={setUrl}
+                setImageIsGenerating={setImageIsGenerating}
+              />
             </div>
           </div>
 
@@ -217,18 +231,17 @@ export default function Home() {
             uploadCount={uploadCount}
             setUploadCount={setUploadCount}
           />
-          {/*button / style me button*/}
-          <GenerateImage
-            tops={tops?.[topIndex]?.file}
-            bottom={bottoms?.[bottomIndex]?.file}
-            self={self?.[0]?.file}
-            setUrl={setUrl}
+
+          <ProductLink
+            self={self}
+            setPasteUrl={setPasteUrl}
             setImageIsGenerating={setImageIsGenerating}
           />
         </div>
 
         <Closet clothes={clothes} />
         <Outfits url={url} />
+
         <LogoutPage />
       </>
     </main>

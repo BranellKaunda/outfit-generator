@@ -21,9 +21,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     );
   }
 
-  //const fields = await request.json();
-  console.log("Received fields:", { file, type, userId });
-
   const blob = await put(file.name, file, {
     access: "public",
     addRandomSuffix: true,
